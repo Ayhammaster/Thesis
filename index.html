@@ -1,1 +1,734 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أطروحة الماجستير - إنترنت الأشياء في سوريا</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5c;
+            --primary-dark: #0f2a44;
+            --primary-light: #2c5a7a;
+            --accent: #d4af37;
+            --accent-light: #e6c555;
+            --gray-light: #f0f4f8;
+            --gray: #6c757d;
+            --dark: #212529;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #e9edf2;
+            color: var(--dark);
+            line-height: 1.7;
+        }
+        .container-carousel {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        /* Header */
+        .thesis-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .thesis-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(212,175,55,0.08) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: shimmer 4s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .header-title {
+            font-size: 2.4rem;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .header-title .accent { color: var(--accent); }
+        .header-sub {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            margin-top: 0.5rem;
+        }
+        .header-meta {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .header-meta .badge-custom {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(6px);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.15);
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .header-meta .badge-custom i { color: var(--accent); }
+        /* Carousel */
+        .thesis-carousel {
+            background: white;
+            border-radius: 0 0 18px 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .slide-content {
+            padding: 2.5rem 2rem;
+            min-height: 500px;
+            background: white;
+            position: relative;
+        }
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(26,58,92,0.3);
+        }
+        .slide-title {
+            color: var(--primary);
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+        }
+        .slide-text {
+            font-size: 1.05rem;
+            color: #2d3748;
+            text-align: justify;
+            margin-bottom: 1.2rem;
+        }
+        .slide-subtitle {
+            font-weight: 600;
+            color: var(--primary-light);
+            font-size: 1.15rem;
+            margin: 1rem 0 0.5rem;
+        }
+        /* Feature grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+        .feature-item {
+            background: var(--gray-light);
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            border-right: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .feature-item i { color: var(--primary); font-size: 1.3rem; }
+        .feature-item:hover { background: #e2e8f0; transform: translateX(-4px); }
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #f8fafc, #eef2f7);
+            padding: 1.2rem;
+            border-radius: 14px;
+            text-align: center;
+            border-top: 4px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .stat-label { color: var(--gray); font-weight: 600; font-size: 0.9rem; }
+        /* Gap cards */
+        .gap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+        }
+        .gap-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid #e9edf2;
+            overflow: hidden;
+        }
+        .gap-header {
+            background: #dc3545;
+            color: white;
+            padding: 0.7rem 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .gap-body { padding: 1rem; }
+        .gap-stat {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+        }
+        .solution-box {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            margin-top: 0.8rem;
+        }
+        .solution-box .sol-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .solution-box .sol-title i { color: var(--accent); }
+        .solution-stat {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        .solution-stat .val { color: var(--accent); font-weight: 700; }
+        /* Process steps */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+        }
+        .process-step {
+            background: var(--gray-light);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-top: 4px solid var(--primary);
+            position: relative;
+        }
+        .step-num {
+            position: absolute;
+            top: -14px;
+            left: 1rem;
+            background: var(--accent);
+            color: var(--primary-dark);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+        }
+        .step-title { font-weight: 700; color: var(--primary); margin-top: 0.5rem; }
+        .step-desc { font-size: 0.95rem; color: var(--gray); }
+        /* Final slide */
+        .final-slide {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            min-height: 550px;
+            position: relative;
+            overflow: hidden;
+        }
+        .final-slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 70%);
+        }
+        .final-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .final-title { font-size: 2.6rem; font-weight: 900; color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .final-title .accent { color: var(--accent); }
+        .final-sub { color: var(--accent); font-size: 1.2rem; font-weight: 600; margin: 0.5rem 0 1.5rem; }
+        .final-text { font-size: 1.1rem; opacity: 0.92; line-height: 1.8; }
+        .final-badges {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        .final-badge {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(6px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .final-badge i { color: var(--accent); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.9rem 2.8rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(212,175,55,0.35);
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .btn-gold:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(212,175,55,0.45);
+            color: var(--primary-dark);
+        }
+        /* Controls */
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+            opacity: 0.6;
+        }
+        .carousel-control-prev:hover, .carousel-control-next:hover { opacity: 1; }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: var(--primary);
+            border-radius: 50%;
+            padding: 1.5rem;
+            background-size: 50% 50%;
+        }
+        .carousel-indicators button {
+            background-color: rgba(26,58,92,0.25);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 4px;
+        }
+        .carousel-indicators .active {
+            background-color: var(--accent);
+            transform: scale(1.3);
+        }
+        .progress-container {
+            height: 4px;
+            background: #e9edf2;
+            border-radius: 0 0 18px 18px;
+            overflow: hidden;
+        }
+        .progress-bar-custom {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 5.88%;
+            transition: width 0.4s ease;
+        }
+        .footer {
+            text-align: center;
+            padding: 1.5rem 0 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .header-title { font-size: 1.8rem; }
+            .slide-content { padding: 1.8rem 1rem; min-height: 400px; }
+            .slide-title { font-size: 1.5rem; }
+            .final-title { font-size: 2rem; }
+            .feature-grid, .stats-grid, .gap-grid, .process-grid { grid-template-columns: 1fr; }
+            .slide-number { width: 36px; height: 36px; font-size: 0.9rem; top: 12px; left: 12px; }
+        }
+        /* Animation */
+        .carousel-item.active .slide-content, .carousel-item.active .final-content {
+            animation: fadeUp 0.7s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* small fixes */
+        .text-gold { color: var(--accent); }
+        .bg-primary-soft { background: var(--gray-light); }
+        .border-accent { border-color: var(--accent); }
+    </style>
+</head>
+<body>
+<div class="container-carousel">
+    <!-- Header -->
+    <div class="thesis-header">
+        <div class="header-title">
+            <span class="accent">الفرص والمخاطر</span> في استخدام إنترنت الأشياء
+        </div>
+        <div class="header-sub">دراسة حالة قدرة الاستخدام في سوريا وتصميم نظام ذكي قائم على تعلم الآلة</div>
+        <div class="header-meta">
+            <span class="badge-custom"><i class="bi bi-person"></i> أيهم أحمد</span>
+            <span class="badge-custom"><i class="bi bi-person-badge"></i> د. محمد حجوز</span>
+            <span class="badge-custom"><i class="bi bi-building"></i> الجامعة الافتراضية السورية</span>
+            <span class="badge-custom"><i class="bi bi-calendar3"></i> 2027 / 2026</span>
+            <span class="badge-custom"><i class="bi bi-tag"></i> ماجستير علوم الوب (MWS)</span>
+        </div>
+    </div>
+
+    <!-- Carousel -->
+    <div id="thesisCarousel" class="carousel slide thesis-carousel" data-bs-ride="carousel" data-bs-interval="7000">
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="4"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="5"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="6"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="7"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="8"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="9"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="10"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="11"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="12"></button>
+            <button type="button" data-bs-target="#thesisCarousel" data-bs-slide-to="13"></button>
+        </div>
+
+        <div class="carousel-inner">
+            <!-- Slide 1: ملخص -->
+            <div class="carousel-item active">
+                <div class="slide-content">
+                    <div class="slide-number">1</div>
+                    <h2 class="slide-title">الملخص</h2>
+                    <p class="slide-text">
+                        يتناول البحث إنترنت الأشياء (IoT) بوصفها تقانة تحوّل التفاعل بين الإنسان والآلة،
+                        مع أكثر من <strong>21 مليار جهاز متصل</strong> عالمياً بنهاية 2026.
+                        يقدم البحث نموذجاً عملياً متكاملاً يجمع بين أجهزة <strong>ESP32</strong>،
+                        خادم <strong>Python/MySQL</strong>، وخوارزميات تعلم الآلة
+                        <strong>Isolation Forest</strong> و <strong>LSTM</strong> لكشف الهجمات الأمني آنياً.
+                    </p>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-number">97.4%</div><div class="stat-label">دقة الكشف</div></div>
+                        <div class="stat-card"><div class="stat-number">48ms</div><div class="stat-label">زمن الكشف</div></div>
+                        <div class="stat-card"><div class="stat-number">68%</div><div class="stat-label">تحسن MQTT</div></div>
+                        <div class="stat-card"><div class="stat-number">31%</div><div class="stat-label">توفير الطاقة</div></div>
+                    </div>
+           
+                </div>
+            </div>
+
+            <!-- Slide 2: مشكلة البحث -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">2</div>
+                    <h2 class="slide-title">مشكلة البحث</h2>
+                    <p class="slide-text">
+                        <strong>المعادلة الصعبة:</strong> استثمار الفرص (الأتمتة، كفاءة الموارد)
+                        مقابل تقليص المخاطر الأمنية (الاختراقات، تسريب البيانات، هجمات DDoS).
+                    </p>
+                    <ul class="feature-grid" style="list-style:none;padding:0;">
+                        <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> أجهزة رخيصة (ESP32) لكن ضعف الموارد</li>
+                        <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> أنظمة قواعد ثابتة  قاصرة عن الهجمات الجديدة</li>
+                        <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> انقطاع الخدمة</li>
+                    </ul>
+                    <div class="slide-subtitle">السؤال الجوهري</div>
+                    <p class="slide-text" style="background:#f0f4f8;padding:1rem;border-radius:12px;border-right:4px solid var(--accent);">
+                        كيف يمكن تصميم نظام IoT متكامل يحقق التوازن بين الفرص والمخاطر، مع مراعاة خصوصية البيئة السورية؟
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 3: الأهداف -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">3</div>
+                    <h2 class="slide-title">الأهداف</h2>
+                    <p class="slide-text"><strong>الهدف العام:</strong> دراسة الفرص والمخاطر وتصميم نموذج تطبيقي متكامل لكشف الهجمات الأمني آنياً.</p>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-1-circle"></i> استعراض الإطار النظري لـ IoT</div>
+                        <div class="feature-item"><i class="bi bi-2-circle"></i> تحليل الفرص في المجالات كافة  </div>
+                        <div class="feature-item"><i class="bi bi-3-circle"></i> توصيف المخاطر والإطار المعياري </div>
+                        <div class="feature-item"><i class="bi bi-4-circle"></i> تصميم بنية رباعية الطبقات (ESP32, MQTT, Python, React)</div>
+                        <div class="feature-item"><i class="bi bi-5-circle"></i> بناء نموذج كشف الهجمات (Isolation Forest + LSTM)</div>
+                        <div class="feature-item"><i class="bi bi-6-circle"></i> تقييم الأداء ومقارنته بالدراسات السابقة</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: الفرضيات -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">4</div>
+                    <h2 class="slide-title">الفرضيات</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-check-lg"></i> <strong>H1:</strong> دقة Isolation Forest &gt; 95% في كشف الهجمات</div>
+                        <div class="feature-item"><i class="bi bi-check-lg"></i> <strong>H2:</strong> MQTT/TLS يخفض زمن الاستجابة ≥ 50% عن HTTP</div>
+                        <div class="feature-item"><i class="bi bi-check-lg"></i> <strong>H3:</strong> النموذج الهجين يوازن بين الدقة وسرعة الكشف</div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-number">✓ H1</div><div class="stat-label">97.4% دقة</div></div>
+                        <div class="stat-card"><div class="stat-number">✓ H2</div><div class="stat-label">68.6% تحسن</div></div>
+          
+                        <div class="stat-card"><div class="stat-number">✓ H3</div><div class="stat-label">توازن مثبت</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: المنهجية -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">5</div>
+                    <h2 class="slide-title">المنهجية</h2>
+                    <p class="slide-text"><strong>منهج مختلط:</strong> وصفي تحليلي + تطبيقي تجريبي.</p>
+                    <div class="process-grid">
+                        <div class="process-step"><div class="step-num">1</div><h4 class="step-title">وصفي تحليلي</h4><p class="step-desc">مراجعة الأدبيات والمعايير الدولية (ITU, IEEE, NIST)</p></div>
+                        <div class="process-step"><div class="step-num">2</div><h4 class="step-title">تطبيقي تجريبي</h4><p class="step-desc">بناء نظام بـ 4 طبقات: أجهزة، اتصال، معالجة، عرض</p></div>
+                        <div class="process-step"><div class="step-num">3</div><h4 class="step-title">تقييمي</h4><p class="step-desc">قياس الدقة، زمن الاستجابة، ROC-AUC، ومقارنة</p></div>
+                    </div>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-laptop"></i> ESP32 + مستشعرات (DHT22, PIR, LDR, MQ-2)</div>
+                        <div class="feature-item"><i class="bi bi-hdd-network"></i> MQTT/TLS + Mosquitto</div>
+                        <div class="feature-item"><i class="bi bi-code-square"></i> Python/Flask + MySQL + React.js</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: البنية المعمارية -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">6</div>
+                    <h2 class="slide-title">البنية المعمارية (4 طبقات)</h2>
+                    <div class="process-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="process-step"><div class="step-num">1</div><h4 class="step-title">طبقة الإدراك</h4><p class="step-desc">ESP32 + مستشعرات (حرارة، رطوبة، حركة، إضاءة، غاز)</p></div>
+                        <div class="process-step"><div class="step-num">2</div><h4 class="step-title">طبقة الشبكة</h4><p class="step-desc">MQTT/TLS عبر Mosquitto، مواضيع هرمية (iot/devices/...)</p></div>
+                        <div class="process-step"><div class="step-num">3</div><h4 class="step-title">طبقة المعالجة</h4><p class="step-desc">Python/Flask API، MySQL 8.0، Redis Cache، Celery</p></div>
+                        <div class="process-step"><div class="step-num">4</div><h4 class="step-title">طبقة التطبيقات</h4><p class="step-desc">React.js + TypeScript، Material-UI، Recharts، WebSocket</p></div>
+                    </div>
+                    <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+                        <div class="feature-item"><i class="bi bi-arrow-right-circle"></i> تدفق البيانات: مستشعرات → ESP32 → MQTT → Flask → MySQL → React</div>
+                        <div class="feature-item"><i class="bi bi-arrow-left-circle"></i> أوامر التحكم: React → Flask → MQTT → ESP32 → GPIO</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: نموذج كشف الهجمات -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">7</div>
+                    <h2 class="slide-title">نموذج كشف الهجمات الهجين</h2>
+                    <div class="process-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="process-step"><div class="step-num">1</div><h4 class="step-title">استخراج الخصائص</h4><p class="step-desc">10 خصائص: القيمة، المتوسط المتحرك، الانحراف، معدل التغير، z-score، إلخ</p></div>
+                        <div class="process-step"><div class="step-num">2</div><h4 class="step-title">Isolation Forest</h4><p class="step-desc">نموذج خفيف (200 شجرة) يعطي درجة شذوذ فورية، عتبة 0.7</p></div>
+                        <div class="process-step"><div class="step-num">3</div><h4 class="step-title">LSTM Autoencoder</h4><p class="step-desc">نموذج عميق (10 خطوات زمنية، 11 خاصية) للتأكيد السياقي</p></div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-number">95.3%</div><div class="stat-label">Isolation Forest</div></div>
+                        <div class="stat-card"><div class="stat-number">96.8%</div><div class="stat-label">LSTM Autoencoder</div></div>
+                        <div class="stat-card"><div class="stat-number">97.4%</div><div class="stat-label">النموذج الهجين</div></div>
+                        <div class="stat-card"><div class="stat-number">2.1ms</div><div class="stat-label">زمن الاستدلال</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: النتائج - الأداء -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">8</div>
+                    <h2 class="slide-title">نتائج الأداء</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-number">97.40%</div><div class="stat-label">الدقة (Accuracy)</div></div>
+                        <div class="stat-card"><div class="stat-number">95.07%</div><div class="stat-label">الإيجابية (Precision)</div></div>
+                        <div class="stat-card"><div class="stat-number">96.26%</div><div class="stat-label">الاستدعاء (Recall)</div></div>
+                        <div class="stat-card"><div class="stat-number">0.984</div><div class="stat-label">AUC (منحنى ROC)</div></div>
+                    </div>
+                    <div class="slide-subtitle">زمن الاستجابة</div>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-clock"></i> MQTT/TLS: 44ms (انحراف 6ms)</div>
+                        <div class="feature-item"><i class="bi bi-clock"></i> HTTP/HTTPS: 140ms (انحراف 9ms)</div>
+                        <div class="feature-item"><i class="bi bi-arrow-up"></i> تحسن MQTT: <strong>68.6%</strong></div>
+                    </div>
+                    <div class="slide-subtitle">معدل نقل البيانات</div>
+                    <p class="slide-text">متوسط 218 رسالة/ثانية، ذروة 420 رسالة/ثانية، دون فقدان.</p>
+                </div>
+            </div>
+
+       
+
+            <!-- Slide 10: المخاطر - كشف الهجمات -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">9</div>
+                    <h2 class="slide-title">المخاطر: كشف الهجمات</h2>
+                    <div class="gap-grid">
+                        <div class="gap-card"><div class="gap-header"><i class="bi bi-bug"></i> DDoS مصغّر</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>99.4%</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header"><i class="bi bi-lock"></i> Bruteforce</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>98.8%</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header"><i class="bi bi-arrow-repeat"></i> Replay</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>94.0%</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header"><i class="bi bi-pencil"></i> Injection</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>96.8%</span></div></div></div>
+                    </div>
+                    <div class="slide-subtitle">مصفوفة الالتباس</div>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-check-circle"></i> TP: 1,093 | FP: 26</div>
+                        <div class="feature-item"><i class="bi bi-x-circle"></i> FN: 31 | TN: 1,850</div>
+                        <div class="feature-item"><i class="bi bi-graph-up"></i> معدل إنذارات كاذبة: 3.0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: المقارنة مع الدراسات السابقة -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">10</div>
+                    <h2 class="slide-title">المقارنة مع الدراسات السابقة</h2>
+                    <div class="gap-grid">
+                        <div class="gap-card"><div class="gap-header" style="background:var(--primary);">النظام المقترح</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>97.4%</span></div><div class="gap-stat"><span>زمن الكشف</span><span>48ms</span></div><div class="gap-stat"><span>التكلفة</span><span>&lt; $50/جهاز</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header" style="background:#6c757d;">Hasan et al. (2019)</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>95.2%</span></div><div class="gap-stat"><span>زمن الكشف</span><span>320ms</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header" style="background:#6c757d;">Anthi et al. (2019)</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>96.1%</span></div><div class="gap-stat"><span>زمن الكشف</span><span>210ms</span></div></div></div>
+                        <div class="gap-card"><div class="gap-header" style="background:#6c757d;">Ferrag et al. (2020)</div><div class="gap-body"><div class="gap-stat"><span>الدقة</span><span>97.1%</span></div><div class="gap-stat"><span>زمن الكشف</span><span>185ms</span></div></div></div>
+                    </div>
+                    <div class="slide-subtitle">مميزات النظام المقترح</div>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-star-fill"></i> أعلى دقة (97.4%) وأسرع زمن كشف (48ms)</div>
+                        <div class="feature-item"><i class="bi bi-cpu"></i> تنفيذ فعلي على ESP32 (ليس محاكاة)</div>
+                        <div class="feature-item"><i class="bi bi-diagram-3"></i> بنية متكاملة (فرص + مخاطر)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: التحديات والحلول -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">11</div>
+                    <h2 class="slide-title">التحديات التي واجهت الباحث</h2>
+                    <div class="gap-grid">
+                        <div class="gap-card"><div class="gap-header" style="background:#e67e22;">الأجهزة</div><div class="gap-body"><p>قراءات متقطعة من DHT22، اختلاف توترات التشغيل (3.3V vs 5V)</p><div class="solution-box"><span class="sol-title"><i class="bi bi-check-circle"></i> الحل</span> مكثف 0.1µF، إعادة محاولة 3 مرات، Level Shifters</div></div></div>
+                        <div class="gap-card"><div class="gap-header" style="background:#2980b9;">الشبكة</div><div class="gap-body"><p>انقطاعات الإنترنت، نقص IP ثابت، NAT Traversal</p><div class="solution-box"><span class="sol-title"><i class="bi bi-check-circle"></i> الحل</span> Reconnect تلقائي، تخزين مؤقت في Flash، Let's Encrypt + Cloudflare Tunnel</div></div></div>
+                        <div class="gap-card"><div class="gap-header" style="background:#8e44ad;">النموذج</div><div class="gap-body"><p>ندرة بيانات هجمات حقيقية، عدم توازن الفئات (95% طبيعي)</p><div class="solution-box"><span class="sol-title"><i class="bi bi-check-circle"></i> الحل</span> دمج Bot-IoT، SMOTE، Class Weighting، ضبط عتبة 0.7</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: التوصيات المستقبلية -->
+            <div class="carousel-item">
+                <div class="slide-content">
+                    <div class="slide-number">12</div>
+                    <h2 class="slide-title">التوصيات المستقبلية</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item"><i class="bi bi-cpu"></i> TinyML: نشر نموذج مكمّم مباشرة على ESP32</div>
+                        <div class="feature-item"><i class="bi bi-diagram-3"></i> Federated Learning: تعلم موزّع يحمي الخصوصية</div>
+                        <div class="feature-item"><i class="bi bi-tree"></i> دراسات ميدانية واسعة (مزرعة، مصنع، مستشفى)</div>
+                        <div class="feature-item"><i class="bi bi-sun"></i> دمج مع الطاقة المتجددة (خلايا شمسية)</div>
+                        <div class="feature-item"><i class="bi bi-mic"></i> واجهة صوتية بالعربية (NLP)</div>
+                        <div class="feature-item"><i class="bi bi-cloud-upload"></i> ربط بمنصات البيانات المفتوحة</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 14: الخاتمة -->
+            <div class="carousel-item">
+                <div class="slide-content final-slide">
+                    <div class="final-content">
+                        <div class="final-title">خاتمة <span class="accent">الدراسة</span></div>
+                        <div class="final-sub">نموذج متكامل للفرص والمخاطر في البيئة السورية</div>
+                        
+                        <div class="final-badges">
+                            <span class="final-badge"><i class="bi bi-check-circle"></i> جاهز للتطبيق</span>
+                            <span class="final-badge"><i class="bi bi-shield-check"></i> معايير دولية</span>
+                            <span class="final-badge"><i class="bi bi-graph-up"></i> أداء متفوق</span>
+                            <span class="final-badge"><i class="bi bi-arrow-right"></i> قابل للتوسع</span>
+                        </div>
+                        <a href="#" class="btn-gold" onclick="event.preventDefault();alert('تم عرض أطروحة الماجستير بنجاح!');">
+                            <i class="bi bi-file-earmark-text"></i> استعراض الرسالة الكاملة
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#thesisCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">السابق</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#thesisCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">التالي</span>
+        </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar-custom" id="progressBar" style="width: 7.14%;"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 أيهم أحمد - الجامعة الافتراضية السورية </p>
+        <p style="font-size:0.8rem;">برنامج ماجستير علوم الوب (MWS) | العام الدراسي 2025/2026</p>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const carousel = new bootstrap.Carousel(document.getElementById('thesisCarousel'), {
+        interval: 7000,
+        wrap: true,
+        keyboard: true,
+        pause: 'hover'
+    });
+    const totalSlides = 14;
+    const progressBar = document.getElementById('progressBar');
+    document.getElementById('thesisCarousel').addEventListener('slide.bs.carousel', function(e) {
+        const progress = ((e.to + 1) / totalSlides) * 100;
+        progressBar.style.width = progress + '%';
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') carousel.prev();
+        else if (e.key === 'ArrowRight') carousel.next();
+    });
+</script>
+</body>
+</html>
