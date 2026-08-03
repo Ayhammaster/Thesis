@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -330,11 +329,39 @@
             display: inline-flex;
             align-items: center;
             gap: 0.7rem;
+            margin: 0.5rem;
         }
         .btn-gold:hover {
             transform: translateY(-4px) scale(1.03);
             box-shadow: 0 15px 40px rgba(212,175,55,0.45);
             color: var(--primary-dark);
+        }
+        .btn-outline-gold {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 0.85rem 2.8rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin: 0.5rem;
+        }
+        .btn-outline-gold:hover {
+            background: rgba(212,175,55,0.15);
+            transform: translateY(-4px);
+            color: var(--accent-light);
+            border-color: var(--accent-light);
+        }
+        .btn-group-final {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         /* Controls */
         .carousel-control-prev, .carousel-control-next {
@@ -385,6 +412,7 @@
             .final-title { font-size: 2rem; }
             .feature-grid, .stats-grid, .gap-grid, .process-grid { grid-template-columns: 1fr; }
             .slide-number { width: 36px; height: 36px; font-size: 0.9rem; top: 12px; left: 12px; }
+            .btn-gold, .btn-outline-gold { padding: 0.7rem 1.5rem; font-size: 1rem; }
         }
         /* Animation */
         .carousel-item.active .slide-content, .carousel-item.active .final-content {
@@ -456,7 +484,6 @@
                         <div class="stat-card"><div class="stat-number">68%</div><div class="stat-label">تحسن MQTT</div></div>
                         <div class="stat-card"><div class="stat-number">31%</div><div class="stat-label">توفير الطاقة</div></div>
                     </div>
-           
                 </div>
             </div>
 
@@ -471,7 +498,7 @@
                     </p>
                     <ul class="feature-grid" style="list-style:none;padding:0;">
                         <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> أجهزة رخيصة (ESP32) لكن ضعف الموارد</li>
-                        <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> أنظمة قواعد ثابتة  قاصرة عن الهجمات الجديدة</li>
+                        <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> أنظمة قواعد ثابتة قاصرة عن الهجمات الجديدة</li>
                         <li class="feature-item"><i class="bi bi-exclamation-triangle-fill"></i> انقطاع الخدمة</li>
                     </ul>
                     <div class="slide-subtitle">السؤال الجوهري</div>
@@ -489,8 +516,8 @@
                     <p class="slide-text"><strong>الهدف العام:</strong> دراسة الفرص والمخاطر وتصميم نموذج تطبيقي متكامل لكشف الهجمات الأمني آنياً.</p>
                     <div class="feature-grid">
                         <div class="feature-item"><i class="bi bi-1-circle"></i> استعراض الإطار النظري لـ IoT</div>
-                        <div class="feature-item"><i class="bi bi-2-circle"></i> تحليل الفرص في المجالات كافة  </div>
-                        <div class="feature-item"><i class="bi bi-3-circle"></i> توصيف المخاطر والإطار المعياري </div>
+                        <div class="feature-item"><i class="bi bi-2-circle"></i> تحليل الفرص في المجالات كافة</div>
+                        <div class="feature-item"><i class="bi bi-3-circle"></i> توصيف المخاطر والإطار المعياري</div>
                         <div class="feature-item"><i class="bi bi-4-circle"></i> تصميم بنية رباعية الطبقات (ESP32, MQTT, Python, React)</div>
                         <div class="feature-item"><i class="bi bi-5-circle"></i> بناء نموذج كشف الهجمات (Isolation Forest + LSTM)</div>
                         <div class="feature-item"><i class="bi bi-6-circle"></i> تقييم الأداء ومقارنته بالدراسات السابقة</div>
@@ -511,7 +538,6 @@
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-number">✓ H1</div><div class="stat-label">97.4% دقة</div></div>
                         <div class="stat-card"><div class="stat-number">✓ H2</div><div class="stat-label">68.6% تحسن</div></div>
-          
                         <div class="stat-card"><div class="stat-number">✓ H3</div><div class="stat-label">توازن مثبت</div></div>
                     </div>
                 </div>
@@ -595,9 +621,7 @@
                 </div>
             </div>
 
-       
-
-            <!-- Slide 10: المخاطر - كشف الهجمات -->
+            <!-- Slide 9: المخاطر - كشف الهجمات -->
             <div class="carousel-item">
                 <div class="slide-content">
                     <div class="slide-number">9</div>
@@ -617,7 +641,7 @@
                 </div>
             </div>
 
-            <!-- Slide 11: المقارنة مع الدراسات السابقة -->
+            <!-- Slide 10: المقارنة مع الدراسات السابقة -->
             <div class="carousel-item">
                 <div class="slide-content">
                     <div class="slide-number">10</div>
@@ -637,7 +661,7 @@
                 </div>
             </div>
 
-            <!-- Slide 12: التحديات والحلول -->
+            <!-- Slide 11: التحديات والحلول -->
             <div class="carousel-item">
                 <div class="slide-content">
                     <div class="slide-number">11</div>
@@ -650,7 +674,7 @@
                 </div>
             </div>
 
-            <!-- Slide 13: التوصيات المستقبلية -->
+            <!-- Slide 12: التوصيات المستقبلية -->
             <div class="carousel-item">
                 <div class="slide-content">
                     <div class="slide-number">12</div>
@@ -666,22 +690,27 @@
                 </div>
             </div>
 
-            <!-- Slide 14: الخاتمة -->
+            <!-- Slide 13: الخاتمة مع زرين -->
             <div class="carousel-item">
                 <div class="slide-content final-slide">
                     <div class="final-content">
                         <div class="final-title">خاتمة <span class="accent">الدراسة</span></div>
                         <div class="final-sub">نموذج متكامل للفرص والمخاطر في البيئة السورية</div>
-                        
+                  
                         <div class="final-badges">
                             <span class="final-badge"><i class="bi bi-check-circle"></i> جاهز للتطبيق</span>
                             <span class="final-badge"><i class="bi bi-shield-check"></i> معايير دولية</span>
                             <span class="final-badge"><i class="bi bi-graph-up"></i> أداء متفوق</span>
                             <span class="final-badge"><i class="bi bi-arrow-right"></i> قابل للتوسع</span>
                         </div>
-                        <a href="#" class="btn-gold" onclick="event.preventDefault();alert('تم عرض أطروحة الماجستير بنجاح!');">
-                            <i class="bi bi-file-earmark-text"></i> استعراض الرسالة الكاملة
-                        </a>
+                        <div class="btn-group-final">
+                            <a href="thesis.docx" class="btn-gold" download>
+                                <i class="bi bi-file-earmark-text"></i> تحميل الرسالة الكاملة
+                            </a>
+                            <a href="https://ayham42095hos.pythonanywhere.com/login" target="_blank" class="btn-outline-gold">
+                                <i class="bi bi-box-arrow-up-right"></i> التطبيق العملي
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -705,7 +734,7 @@
 
     <!-- Footer -->
     <div class="footer">
-        <p>© 2026 أيهم أحمد - الجامعة الافتراضية السورية </p>
+        <p>© 2026 أيهم أحمد - الجامعة الافتراضية السورية</p>
         <p style="font-size:0.8rem;">برنامج ماجستير علوم الوب (MWS) | العام الدراسي 2025/2026</p>
     </div>
 </div>
