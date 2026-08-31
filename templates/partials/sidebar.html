@@ -1,0 +1,57 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <img src="{{ url_for('static', filename='SVULOGO.jpg') }}" alt="Logo">
+        <h6>نظام إنترنت الأشياء</h6>
+        <small>الجامعة الافتراضية السورية</small>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a class="nav-link active" data-view="dashboard">
+                <i class="fa-solid fa-gauge-high"></i><span>لوحة التحكم</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-view="temperature">
+                <i class="fa-solid fa-temperature-three-quarters"></i><span>درجة الحرارة</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-view="humidity">
+                <i class="fa-solid fa-droplet"></i><span>الرطوبة</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-view="devices">
+                <i class="fa-solid fa-microchip"></i><span>إدارة الأجهزة</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-view="thresholds">
+                <i class="fa-solid fa-sliders"></i><span>إدارة العتبات</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-view="alerts">
+                <i class="fa-solid fa-bell"></i><span>سجل التنبيهات</span>
+                <span class="pulse-dot" style="margin-right:auto;"></span>
+            </a>
+        </li>
+          <li class="nav-item">
+        <a href="#" class="nav-link" data-view="models">
+    <i class="fa-solid fa-brain"></i> <span>إدارة النماذج</span>
+</a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div>
+                <div style="font-weight:700; font-size:0.85rem;">{{ user_name }}</div>
+                <small style="color:var(--text-muted);">{{ user_role }}</small>
+            </div>
+        </div>
+        <a href="/logout" class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج
+        </a>
+    </div>
+</aside>

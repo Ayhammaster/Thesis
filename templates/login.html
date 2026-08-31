@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | نظام إنترنت الأشياء</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Tajawal', sans-serif; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0e27 0%, #1e3c72 50%, #2a5298 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: -50%; left: -50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+        .login-card {
+            background: rgba(13, 19, 48, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset;
+            width: 460px;
+            max-width: 92%;
+            padding: 45px 40px;
+            position: relative;
+            z-index: 2;
+            color: #e2e8f0;
+        }
+        .uni-logo {
+            width: 90px; height: 90px;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, #00d4ff, #3b82f6);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(0, 212, 255, 0.7); }
+        }
+        .login-card h5 {
+            color: #00d4ff;
+            font-weight: 900;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        .login-card .text-muted {
+            color: #94a3b8 !important;
+        }
+        .info-box {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .info-box .fw-bold { color: #f1f5f9; }
+        .form-label {
+            color: #cbd5e1;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: #f1f5f9;
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.08);
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
+            color: #fff;
+        }
+        .form-control::placeholder { color: #64748b; }
+        .input-icon {
+            position: relative;
+        }
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00d4ff;
+            opacity: 0.7;
+        }
+        .input-icon .form-control { padding-left: 40px; }
+        .btn-login {
+            background: linear-gradient(135deg, #00d4ff 0%, #3b82f6 100%);
+            border: none;
+            color: #0a0e27;
+            font-weight: 900;
+            padding: 13px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.6);
+            color: #0a0e27;
+        }
+        .demo-info {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+        .demo-info code {
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        hr {
+            border-color: rgba(0, 212, 255, 0.15);
+            margin: 20px 0;
+        }
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card text-center">
+        <img src="{{ url_for('static', filename='SVULOGO.jpg') }}" alt="SVU Logo" class="uni-logo">
+        <h5>الجامعة الافتراضية السورية</h5>
+        <p class="text-muted mb-3">ماجستير علوم الوب (MWS)</p>
+
+        <div class="info-box">
+            <div class="fw-bold mb-1" style="color: #00d4ff;">
+                <i class="fa-solid fa-microchip ms-1"></i>
+                الفرص والمخاطر في استخدام إنترنت الأشياء
+            </div>
+            <div class="text-muted small mt-2">
+                إعداد الطالب: <span class="fw-bold" style="color:#f1f5f9;">أيهم أحمد</span>
+            </div>
+            <div class="text-muted small">
+                إشراف: <span class="fw-bold" style="color:#f1f5f9;">أ.د. محمد حجوز</span>
+            </div>
+        </div>
+
+        <hr>
+
+        {% if error %}
+        <div class="alert alert-danger py-2 mb-3">
+            <i class="fa-solid fa-triangle-exclamation ms-1"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="mb-3 text-end">
+                <label class="form-label">
+                    <i class="fa-solid fa-user ms-1" style="color:#00d4ff;"></i> اسم المستخدم
+                </label>
+                <div class="input-icon">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <input type="text" name="username" class="form-control" 
+                           placeholder="أدخل اسم المستخدم" required>
+                </div>
+            </div>
+            <div class="mb-4 text-end">
+                <label class="form-label">
+                    <i class="fa-solid fa-lock ms-1" style="color:#00d4ff;"></i> كلمة المرور
+                </label>
+                <div class="input-icon">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" name="password" class="form-control" 
+                           placeholder="أدخل كلمة المرور" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-login w-100">
+                <i class="fa-solid fa-arrow-left-to-bracket ms-2"></i>
+                دخول إلى لوحة التحكم
+            </button>
+        </form>
+
+        <div class="demo-info">
+            <i class="fa-solid fa-circle-info ms-1" style="color:#00d4ff;"></i>
+            بيانات الدخول التجريبية:<br>
+            دكتور <code>doctor / doctor123</code><br>
+            طالب <code>student / student123</code>
+        </div>
+    </div>
+</body>
+</html>

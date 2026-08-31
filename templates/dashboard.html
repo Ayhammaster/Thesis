@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}لوحة التحكم | نظام إنترنت الأشياء{% endblock %}
+{% block body %}
+<button class="mobile-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+{% include "partials/sidebar.html" %}
+<main class="main-content">
+    {% include "partials/views/dashboard_view.html" %}
+    {% include "partials/views/temperature_view.html" %}
+    {% include "partials/views/humidity_view.html" %}
+    {% include "partials/views/devices_view.html" %}
+    {% include "partials/views/thresholds_view.html" %}
+    {% include "partials/views/alerts_view.html" %}
+</main>
+{% include "partials/modals.html" %}
+{% endblock %}

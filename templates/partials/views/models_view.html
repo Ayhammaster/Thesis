@@ -1,0 +1,28 @@
+<section class="view" id="view-models">
+    <div class="page-header">
+        <div class="page-title">
+            <div class="icon-box" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+            <div>
+                <h2>إدارة النماذج الذكية</h2>
+                <small>مقارنة أداء نماذج الكشف عن الشذوذ</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-table"></i> تقييم آخر قراءة مستلمة</h5>
+                <div id="modelsTable" class="mt-3 text-center text-muted">في انتظار البيانات...</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-chart-pie" style="color:#8b5cf6;"></i> مخطط درجات الشذوذ (Anomaly Scores)</h5>
+                <div class="chart-container"><canvas id="modelsRadarChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</section>

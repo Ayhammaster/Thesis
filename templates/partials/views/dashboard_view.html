@@ -1,0 +1,68 @@
+<section class="view active" id="view-dashboard">
+    <div class="page-header">
+        <div class="page-title">
+            <div class="icon-box"><i class="fa-solid fa-gauge-high"></i></div>
+            <div>
+                <h2>لوحة التحكم الرئيسية</h2>
+                <small>نظرة عامة على نظام إنترنت الأشياء</small>
+            </div>
+        </div>
+        <button class="btn btn-danger-custom" onclick="clearAllSensorData()">
+            <i class="fa-solid fa-trash"></i> حذف بيانات المستشعرات
+        </button>
+    </div>
+
+    <div class="row g-3 mb-2">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(0,212,255,0.15); color:var(--accent-cyan);">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <div class="value" id="totalDevices">0</div>
+                <div class="label">إجمالي الأجهزة</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(16,185,129,0.15); color:#34d399;">
+                    <i class="fa-solid fa-wifi"></i>
+                </div>
+                <div class="value" id="onlineDevices">0</div>
+                <div class="label">الأجهزة المتصلة</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(255,140,66,0.15); color:#ff8c42;">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div class="value" id="totalAlerts">0</div>
+                <div class="label">إجمالي التنبيهات</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(59,130,246,0.15); color:#3b82f6;">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="value" id="sentEmails">0</div>
+                <div class="label">الإيميلات المرسلة</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-temperature-three-quarters" style="color:#ff8c42;"></i> آخر قراءات الحرارة</h5>
+                <div class="chart-container"><canvas id="dashTempChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-droplet" style="color:var(--accent-cyan);"></i> آخر قراءات الرطوبة</h5>
+                <div class="chart-container"><canvas id="dashHumChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</section>

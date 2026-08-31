@@ -1,0 +1,67 @@
+<section class="view" id="view-humidity">
+    <div class="page-header">
+        <div class="page-title">
+            <div class="icon-box"><i class="fa-solid fa-droplet"></i></div>
+            <div>
+                <h2>صفحة الرطوبة</h2>
+                <small>مراقبة الرطوبة</small>
+            </div>
+        </div>
+        <button class="btn btn-danger-custom" onclick="clearSensorDataByType('humidity')">
+            <i class="fa-solid fa-trash"></i> حذف بيانات الرطوبة
+        </button>
+    </div>
+
+    <div class="big-number-card">
+        <div class="label"><i class="fa-solid fa-droplet"></i> نسبة الرطوبة الحالية</div>
+        <div class="number" id="humValue">--</div><span class="unit">%</span>
+        <div class="timestamp" id="humTime">آخر تحديث: --</div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(16,185,129,0.15); color:#34d399;"><i class="fa-solid fa-arrow-down"></i></div>
+                <div class="value" id="humMin">--</div>
+                <div class="label">أقل قيمة</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(239,68,68,0.15); color:#fca5a5;"><i class="fa-solid fa-arrow-up"></i></div>
+                <div class="value" id="humMax">--</div>
+                <div class="label">أعلى قيمة</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(59,130,246,0.15); color:#3b82f6;"><i class="fa-solid fa-calculator"></i></div>
+                <div class="value" id="humAvg">--</div>
+                <div class="label">المتوسط</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(0,212,255,0.15); color:var(--accent-cyan);"><i class="fa-solid fa-list-ol"></i></div>
+                <div class="value" id="humCount">--</div>
+                <div class="label">عدد القراءات</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <h5><i class="fa-solid fa-chart-line" style="color:var(--accent-cyan);"></i> مخطط تغير الرطوبة</h5>
+        <div class="chart-container"><canvas id="humChart"></canvas></div>
+        <div class="mt-3 d-flex gap-2 align-items-center justify-content-end flex-wrap">
+            <label class="form-label-custom" style="margin:0;">الجهاز:</label>
+            <select id="humDeviceFilter" class="form-control-custom" style="width:auto; padding:5px; min-width:160px;" onchange="loadSensorData('humidity')"></select>
+            <label class="form-label-custom" style="margin:0;">عرض سجلات يوم:</label>
+            <select id="humDayFilter" class="form-control-custom" style="width:auto; padding:5px; min-width:140px;" onchange="loadSensorData('humidity')"></select>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <h5 style="color:var(--accent-cyan);"><i class="fa-solid fa-sliders"></i> حالة العتبة</h5>
+        <div id="humThresholdStatus" class="mt-3"></div>
+    </div>
+</section>

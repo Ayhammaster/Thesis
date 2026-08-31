@@ -1,0 +1,57 @@
+<section class="view" id="view-devices">
+    <div class="page-header">
+        <div class="page-title">
+            <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+            <div>
+                <h2>إدارة الأجهزة</h2>
+                <small>إدارة المستشعرات</small>
+            </div>
+        </div>
+        <button class="btn btn-primary-custom" onclick="openModal('deviceModal')">
+            <i class="fa-solid fa-plus"></i> إضافة جهاز
+        </button>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(0,212,255,0.15); color:var(--accent-cyan);"><i class="fa-solid fa-server"></i></div>
+                <div class="value" id="devTotal">0</div>
+                <div class="label">إجمالي الأجهزة</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(16,185,129,0.15); color:#34d399;"><i class="fa-solid fa-wifi"></i></div>
+                <div class="value" id="devOnline">0</div>
+                <div class="label">المتصلة</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(239,68,68,0.15); color:#fca5a5;"><i class="fa-solid fa-plug-circle-xmark"></i></div>
+                <div class="value" id="devOffline">0</div>
+                <div class="label">غير المتصلة</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <input type="text" class="table-search" id="deviceSearch" placeholder="🔍 ابحث عن جهاز...">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>كود الجهاز</th>
+                        <th>الاسم</th>
+                        <th>البروتوكول</th>
+                        <th>الحالة</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="devicesTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
