@@ -15,12 +15,18 @@
         <div class="col-md-6">
             <div class="chart-card">
                 <h5><i class="fa-solid fa-table"></i> تقييم آخر قراءة مستلمة</h5>
+                <div class="d-flex justify-content-center my-3">
+                    <select id="modelSensorSelect" class="form-select" style="max-width:220px;" onchange="loadModelsComparison()">
+                        <option value="temperature">🌡️ آخر قراءة حرارة</option>
+                        <option value="humidity">💧 آخر قراءة رطوبة</option>
+                    </select>
+                </div>
                 <div id="modelsTable" class="mt-3 text-center text-muted">في انتظار البيانات...</div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="chart-card">
-                <h5><i class="fa-solid fa-chart-pie" style="color:#8b5cf6;"></i> مخطط درجات الشذوذ (Anomaly Scores)</h5>
+                <h5><i class="fa-solid fa-chart-column" style="color:#8b5cf6;"></i> مخطط درجات السلوك غير الاعتيادي (Anomaly Scores)</h5>
                 <div class="chart-container"><canvas id="modelsRadarChart"></canvas></div>
             </div>
         </div>

@@ -1,0 +1,90 @@
+import os
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+
+# إعداد المجلد لحفظ النماذج
+MODELS_DIR = 'models'
+if not os.path.exists(MODELS_DIR):
+    os.makedirs(MODELS_DIR)
+
+SEQ_LENGTH = 10  # استخدام آخر 10 قراءات للتنبؤ
+
+def create_sequences(data, seq_length):
+    X, y = [], []
+    for i in range(len(data) - seq_length):
+        X.append(data[i:(i + seq_length), 0])
+        y.append(data[i + seq_length, 0])
+    return np.array(X), np.array(y)
+
+def train_hybrid_model(df, sensor_type):
+    print(f"\n--- بدء تدريب النموذج الهجين لـ {sensor_type} ---")
+    
+    # تصفية البيانات حسب نوع المستشعر
+    subset = df[df['sensor_type'] == sensor_type].copy()
+    if len(subset) < SEQ_LENGTH + 10:
+        print(f"البيانات غير كافية لـ {sensor_type}. تخطي...")
+        return
+
+    # استخراج القيم والأوقات
+    values = subset['value'].values.reshape(-1, 1)
+    timestamps = pd.to_datetime(subset['timestamp'])
+    hours = timestamps.dt.hour.values
+
+    # 1. تحجيم البيانات (Scaling)
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_values = scaler.fit_transform(values)
+
+    # 2. إنشاء سلاسل زمنية
+    X, y = create_sequences(scaled_values, SEQ_LENGTH)
+    X = X.reshape((X.shape[0], X.shape[1], 1))
+
+    # 3. بناء وتدريب نموذج LSTM
+    lstm_model = Sequential([
+        LSTM(50, activation='relu', input_shape=(SEQ_LENGTH, 1)),
+        Dense(1)
+    ])
+    lstm_model.compile(optimizer='adam', loss='mse')
+    print(f"تدريب LSTM لـ {sensor_type}...")
+    lstm_model.fit(X, y, epochs=15, batch_size=32, verbose=1)
+
+    # 4. الحصول على التنبؤات وحساب الخطأ (Residuals)
+    predictions = lstm_model.predict(X)
+    residuals = np.abs(predictions.flatten() - y)
+
+    # 5. تجهيز بيانات Isolation Forest
+    # الميزات: [القيمة الفعلية المخففة، الخطأ، ساعة اليوم]
+    actual_values = y
+    # أخذ ساعات اليوم المتوافقة مع تسلسل y (بداية من SEQ_LENGTH)
+    aligned_hours = hours[SEQ_LENGTH:] 
+    
+    iforest_data = np.column_stack((actual_values, residuals, aligned_hours))
+
+    # 6. تدريب Isolation Forest
+    print(f"تدريب Isolation Forest لـ {sensor_type}...")
+    iforest = IsolationForest(contamination=0.05, random_state=42)
+    iforest.fit(iforest_data)
+
+    # 7. حفظ النماذج
+    lstm_model.save(os.path.join(MODELS_DIR, f'{sensor_type}_lstm.keras'))
+    joblib.dump(scaler, os.path.join(MODELS_DIR, f'{sensor_type}_scaler.pkl'))
+    joblib.dump(iforest, os.path.join(MODELS_DIR, f'{sensor_type}_iforest.pkl'))
+    print(f"✅ تم حفظ النماذج الهجينة لـ {sensor_type} بنجاح!")
+
+# ==================== بدء التنفيذ ====================
+# قراءة ملف CSV (تأكد أن الملف مرفوع في كولاب)
+try:
+    df = pd.read_csv('sensor_data.csv')
+    print("تم تحميل البيانات بنجاح! عدد القراءات:", len(df))
+    
+    # تدريب الحرارة والرطوبة
+    train_hybrid_model(df, 'temperature')
+    train_hybrid_model(df, 'humidity')
+    
+    print("\n🎉 اكتمل تدريب جميع النماذج! يمكنك الآن تحميل مجلد 'models'")
+except FileNotFoundError:
+    print("❌ خطأ: لم يتم العثور على ملف sensor_data.csv. الرجاء رفعه أولاً.")

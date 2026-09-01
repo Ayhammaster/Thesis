@@ -18,8 +18,9 @@ const char* deviceId = "ESP-01";
 const char* encryptionKey = "MY_SECRET_KEY_123";
 
 // إعدادات الخوادم
-const char* httpServerUrl = "https://ayham42095hos.pythonanywhere.com/api/data";
-const char* mqttServer = "broker.hivemq.com";
+// ⚠️ ضع هنا الـ IP المحلي لجهازك (نفس شبكة الواي فاي) - اعرفه من أمر: ipconfig
+const char* httpServerUrl = "http://192.168.1.7:5000/api/data";
+const char* mqttServer = "broker.hivemq.com"; // بروكر عام - لا يحتاج تثبيت محلي
 const int mqttPort = 1883;
 const char* mqttTopic = "iot/anomaly/data";
 
@@ -142,9 +143,8 @@ void sendSensorData(String sensorType, float value, unsigned long long clientTim
 // دالة الإرسال عبر HTTP
 // ==========================================
 void sendViaHTTP(String sensorType, float value, unsigned long long clientTimeMs, String proto) {
-  secureClient.setInsecure();
   HTTPClient http;
-  http.begin(secureClient, httpServerUrl);
+  http.begin(espClient, httpServerUrl); // HTTP محلي بدون تشفير
   http.addHeader("Content-Type", "application/json");
   
   StaticJsonDocument<256> doc;

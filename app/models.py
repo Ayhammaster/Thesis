@@ -33,6 +33,7 @@ class SensorReading(db.Model):
     value = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now())
     latency_ms = db.Column(db.Integer)
+    protocol = db.Column(db.String(10))  # البروتوكول المستخدم لحظة استلام القراءة
     is_anomaly = db.Column(db.Boolean, default=False)
     anomaly_score = db.Column(db.Float)
 

@@ -4,3 +4,7 @@ Flask-Mail
 Werkzeug
 gunicorn
 paho-mqtt==1.6.1
+tensorflow-cpu
+scikit-learn
+joblib
+numpy

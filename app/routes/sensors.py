@@ -49,11 +49,12 @@ def receive_data():
         try:
             client_time = datetime.fromtimestamp(int(client_time_str) / 1000.0)
             latency_ms = int((server_time - client_time).total_seconds() * 1000)
-            if latency_ms < 0: latency_ms = 0
+            # تجاهل الفروقات غير المنطقية (ساعة رملية غير متزامنة)
+            if latency_ms < 0 or latency_ms > 300000: latency_ms = 0
         except: pass
 
-    # Anomaly detection
-    anomaly_result = AnomalyDetector.detect(value, sensor_type)
+    # Anomaly detection (النماذج الأربعة: Z-Score، LSTM، Isolation Forest، فحص التأخير)
+    anomaly_result = AnomalyDetector.detect_all(value, sensor_type, device.id, latency_ms)
 
     reading = SensorReading(
         device_id=device.id,
@@ -61,6 +62,7 @@ def receive_data():
         value=value,
         timestamp=server_time,
         latency_ms=latency_ms,
+        protocol=data.get('protocol', 'HTTP'),
         is_anomaly=anomaly_result['is_anomaly'],
         anomaly_score=anomaly_result['anomaly_score']
     )
@@ -68,22 +70,30 @@ def receive_data():
 
     # Check thresholds and send alerts
     threshold = Threshold.query.filter_by(sensor_type=sensor_type).first()
-    target_email = get_setting('alert_email')
+    target_email = get_setting('alert_email') or current_app.config['EMAIL_ADDRESS']
+
+    # أسماء النماذج التي رصدت الشذوذ
+    models = anomaly_result.get('models', {})
+    flagged = [m['name'] for m in models.values() if m.get('is_anomaly')]
+    models_line = f"\nالنماذج المكتشِفة: {'، '.join(flagged)}" if flagged else ''
 
     if threshold and (value < threshold.min_value or value > threshold.max_value):
-        alert_msg = (f"تنبيه!\nالجهاز: {device.name}\n"
+        alert_msg = (f"تنبيه تجاوز عتبة!\nالجهاز: {device.name}\n"
                     f"المستشعر: {sensor_type}\nالقيمة: {value}\n"
-                    f"تجاوز الحدود ({threshold.min_value} - {threshold.max_value}).")
+                    f"تجاوز الحدود ({threshold.min_value} - {threshold.max_value})."
+                    + models_line)
         email_status = current_app.email_service.send_alert(
-            f"تنبيه من {device.name}", alert_msg, target_email
+            f"🚨 تجاوز عتبة - {device.name}", alert_msg, target_email, style='threshold'
         )
         db.session.add(Alert(device_id=device.id, message=alert_msg, email_sent=email_status))
 
     if anomaly_result['is_anomaly']:
         security_msg = (f"⚠️ تنبيه أمني!\nالجهاز: {device.name}\n"
-                       f"سلوك غير اعتيادي مكتشف (الدرجة: {anomaly_result['anomaly_score']}).")
+                       f"المستشعر: {sensor_type}\nالقيمة: {value}\n"
+                       f"سلوك غير اعتيادي مكتشف (الدرجة: {anomaly_result['anomaly_score']})."
+                       + (f"\nالنماذج المكتشِفة: {'، '.join(flagged)}" if flagged else ''))
         email_status = current_app.email_service.send_alert(
-            "تنبيه أمني - حالة غير اعتيادية", security_msg, target_email
+            "تنبيه أمني - حالة غير اعتيادية", security_msg, target_email, style='security'
         )
         db.session.add(Alert(device_id=device.id, message=security_msg, email_sent=email_status))
 
@@ -219,9 +229,12 @@ def models_comparison():
     auth = check_auth()
     if auth: return auth
 
-    last = (SensorReading.query
-            .order_by(SensorReading.timestamp.desc())
-            .first())
+    sensor_type = request.args.get('sensor_type')
+    query = SensorReading.query
+    if sensor_type in ('temperature', 'humidity'):
+        query = query.filter_by(sensor_type=sensor_type)
+
+    last = query.order_by(SensorReading.timestamp.desc()).first()
     if not last:
         return jsonify({'message': 'لا توجد قراءات بعد لتحليل النماذج.'})
 
@@ -240,9 +253,10 @@ def latency_comparison():
     for protocol in ['HTTP', 'MQTT']:
         rows = (db.session.query(SensorReading.latency_ms)
                 .join(Device, SensorReading.device_id == Device.id)
-                .filter(Device.protocol == protocol,
+                .filter(func.coalesce(SensorReading.protocol, Device.protocol) == protocol,
                         SensorReading.latency_ms.isnot(None),
-                        SensorReading.latency_ms > 0)
+                        SensorReading.latency_ms > 0,
+                        SensorReading.latency_ms <= 300000)
                 .all())
         values = [r[0] for r in rows]
         if values:

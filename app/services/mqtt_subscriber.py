@@ -6,9 +6,11 @@ from app.models import Device, SensorReading, Alert, Threshold
 from app.services.anomaly_service import AnomalyDetector
 from flask import current_app
 
-MQTT_BROKER = "broker.hivemq.com"
-MQTT_PORT = 1883
-MQTT_TOPIC = "iot/anomaly/data"
+import os
+# بروكر عام افتراضياً (يمكن تغييره بمتغير البيئة MQTT_BROKER)
+MQTT_BROKER = os.environ.get('MQTT_BROKER', 'broker.hivemq.com')
+MQTT_PORT = int(os.environ.get('MQTT_PORT', '1883'))
+MQTT_TOPIC = os.environ.get('MQTT_TOPIC', 'iot/anomaly/data')
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected to MQTT Broker with result code {rc}")
@@ -51,14 +53,14 @@ def on_message(client, userdata, msg):
             if client_time_str:
                 client_time = datetime.fromtimestamp(int(client_time_str) / 1000.0)
                 latency_ms = int((server_time - client_time).total_seconds() * 1000)
-                if latency_ms < 0: latency_ms = 0
+                if latency_ms < 0 or latency_ms > 300000: latency_ms = 0
 
             # كشف الشذوذ
             anomaly_result = AnomalyDetector.detect_all(value, sensor_type, device.id, latency_ms)
 
             reading = SensorReading(
                 device_id=device.id, sensor_type=sensor_type, value=value,
-                timestamp=server_time, latency_ms=latency_ms,
+                timestamp=server_time, latency_ms=latency_ms, protocol='MQTT',
                 is_anomaly=anomaly_result['is_anomaly'],
                 anomaly_score=anomaly_result['models']['ml_sensor']['score']
             )

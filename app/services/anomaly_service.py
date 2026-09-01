@@ -33,6 +33,8 @@ class AnomalyDetector:
 
     @staticmethod
     def detect_all(value, sensor_type, device_id=None, latency_ms=0, threshold_z=3.0, history_limit=30):
+        from app.services.ml_service import predict_hybrid
+
         query = SensorReading.query.filter_by(sensor_type=sensor_type)
         if device_id:
             query = query.filter_by(device_id=device_id)
@@ -53,35 +55,25 @@ class AnomalyDetector:
                 if stat_score > threshold_z:
                     stat_anomaly = True
 
-        # نموذج ML مبسط للقيمة: يعتمد على مدى القيم التاريخية (IQR)
-        ml_sensor_score = 0.5
-        ml_sensor_anomaly = False
-        if len(values) >= 5:
-            sorted_v = sorted(values)
-            q1 = sorted_v[len(sorted_v) // 4]
-            q3 = sorted_v[(len(sorted_v) * 3) // 4]
-            iqr = q3 - q1
-            if iqr > 0 and (value < q1 - 1.5 * iqr or value > q3 + 1.5 * iqr):
-                ml_sensor_anomaly = True
-                ml_sensor_score = -0.8
+        # النموذج الهجين المدرب: LSTM + Isolation Forest
+        hybrid = predict_hybrid(sensor_type)
+        if hybrid:
+            lstm_anomaly = hybrid['residual'] > 0.15  # خطأ تنبؤ كبير = سلوك غير اعتيادي
+            iforest_anomaly = hybrid['is_anomaly']
+            lstm_score = round(hybrid['residual'] * 100, 1)      # نسبة خطأ التنبؤ %
+            iforest_score = hybrid['anomaly_pct']                # نسبة الشذوذ %
+        else:
+            lstm_anomaly = iforest_anomaly = False
+            lstm_score = iforest_score = 0.0
 
-        # نموذج ML مبسط للتأخير: يعتمد على متوسط التأخير التاريخي
-        ml_latency_score = 0.5
-        ml_latency_anomaly = False
-        latencies = [r.latency_ms for r in history if r.latency_ms and r.latency_ms > 0]
-        if len(latencies) >= 5:
-            lat_mean = sum(latencies) / len(latencies)
-            if lat_mean > 0 and latency_ms > lat_mean * 3:
-                ml_latency_anomaly = True
-                ml_latency_score = -0.8
-
-        is_anomaly = stat_anomaly or ml_sensor_anomaly or ml_latency_anomaly
+        is_anomaly = stat_anomaly or lstm_anomaly or iforest_anomaly
         return {
             'is_anomaly': is_anomaly,
-            'anomaly_score': ml_sensor_score if ml_sensor_anomaly else stat_score,
+            'anomaly_score': stat_score,
+            'hybrid': hybrid,
             'models': {
                 'statistical': {'name': 'إحصائي (Z-Score)', 'score': stat_score, 'is_anomaly': stat_anomaly},
-                'ml_sensor': {'name': 'ذكاء المستشعر (IQR)', 'score': ml_sensor_score, 'is_anomaly': ml_sensor_anomaly},
-                'ml_latency': {'name': 'ذكاء زمن الاستجابة', 'score': ml_latency_score, 'is_anomaly': ml_latency_anomaly}
+                'ml_sensor': {'name': 'شبكة LSTM المدربة', 'score': lstm_score, 'is_anomaly': lstm_anomaly},
+                'ml_latency': {'name': 'غابة العزل Isolation Forest', 'score': iforest_score, 'is_anomaly': iforest_anomaly}
             }
         }

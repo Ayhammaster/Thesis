@@ -543,7 +543,9 @@ let radarChart = null;
 
 async function loadModelsComparison() {
     try {
-        const data = await api('/api/models-comparison');
+        const sensorSel = document.getElementById('modelSensorSelect');
+        const sensorType = sensorSel ? sensorSel.value : 'temperature';
+        const data = await api(`/api/models-comparison?sensor_type=${sensorType}`);
         const tableEl = document.getElementById('modelsTable');
 
         if (data.message) {
@@ -552,6 +554,14 @@ async function loadModelsComparison() {
         }
 
         const models = data.models;
+        const sensorLabel = data.sensor_type === 'temperature' ? '🌡️ حرارة' : '💧 رطوبة';
+        const icons = { statistical: 'fa-calculator', ml_sensor: 'fa-robot', ml_latency: 'fa-tree' };
+        const rows = Object.entries(models).map(([key, m]) => `
+            <tr>
+                <td><i class="fa-solid ${icons[key] || 'fa-microchip'}"></i> ${m.name}</td>
+                <td>${key === 'statistical' ? m.score : m.score + ' %'}</td>
+                <td>${m.is_anomaly ? '<span class="badge bg-danger">شذوذ</span>' : '<span class="badge bg-success">طبيعي</span>'}</td>
+            </tr>`).join('');
         let html = `
             <table class="table table-custom">
                 <thead>
@@ -561,56 +571,64 @@ async function loadModelsComparison() {
                         <th>الحالة</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td><i class="fa-solid fa-calculator"></i> ${models.statistical.name}</td>
-                        <td>${models.statistical.score}</td>
-                        <td>${models.statistical.is_anomaly ? '<span class="badge bg-danger">شذوذ</span>' : '<span class="badge bg-success">طبيعي</span>'}</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-robot"></i> ${models.ml_sensor.name}</td>
-                        <td>${models.ml_sensor.score}</td>
-                        <td>${models.ml_sensor.is_anomaly ? '<span class="badge bg-danger">شذوذ</span>' : '<span class="badge bg-success">طبيعي</span>'}</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-clock"></i> ${models.ml_latency.name}</td>
-                        <td>${models.ml_latency.score}</td>
-                        <td>${models.ml_latency.is_anomaly ? '<span class="badge bg-danger">شذوذ</span>' : '<span class="badge bg-success">طبيعي</span>'}</td>
-                    </tr>
-                </tbody>
+                <tbody>${rows}</tbody>
             </table>
             <div class="mt-3 text-center">
-                <small class="text-muted">القيمة المقيّمة: ${data.value} | زمن الاستجابة: ${data.latency_ms}ms</small><br>
+                <small class="text-muted">المستشعر المقيَّم: ${sensorLabel} | القيمة: ${data.value} | زمن الاستجابة: ${data.latency_ms}ms</small><br>
                 <strong>القرار النهائي للنظام: </strong>
                 ${data.is_anomaly ? '<span class="text-danger fw-bold">⚠️ حالة شاذة</span>' : '<span class="text-success fw-bold">✓ حالة طبيعية</span>'}
             </div>
         `;
         tableEl.innerHTML = html;
 
-        // تحديث الرسم البياني (Radar)
+        // تحديث الرسم البياني (أعمدة أفقية متناسقة)
         const ctx = document.getElementById('modelsRadarChart').getContext('2d');
         if (radarChart) radarChart.destroy();
 
         // تحويل الدرجات لنسب مئوية لتظهر بشكل متناسق في الرسم البياني
         const statScore = Math.min(models.statistical.score / 3.0 * 100, 100); // 3.0 is threshold
-        const mlSensorScore = models.ml_sensor.score < 0 ? 100 : 50; // IF < 0 is anomaly
-        const mlLatencyScore = models.ml_latency.score < 0 ? 100 : 50;
+        const chartScores = [
+            statScore,
+            Math.min(models.ml_sensor.score, 100),
+            Math.min(models.ml_latency.score, 100)
+        ];
+        const chartLabels = ['إحصائي (Z-Score)', 'شبكة LSTM المدربة', 'غابة العزل Isolation Forest'];
 
         radarChart = new Chart(ctx, {
-            type: 'radar',
+            type: 'bar',
             data: {
-                labels: ['إحصائي (Z-Score)', 'ذكاء المستشعر', 'ذكاء زمن الاستجابة'],
+                labels: chartLabels,
                 datasets: [{
-                    label: 'نسبة الشذوذ (%)',
-                    data: [statScore, mlSensorScore, mlLatencyScore],
-                    backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                    borderColor: 'rgba(139, 92, 246, 1)',
-                    pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                    label: 'نسبة السلوك غير الاعتيادي (%)',
+                    data: chartScores,
+                    backgroundColor: [
+                        'rgba(139, 92, 246, 0.5)',
+                        'rgba(0, 212, 255, 0.5)',
+                        'rgba(255, 140, 66, 0.5)'
+                    ],
+                    borderColor: ['#8b5cf6', '#00d4ff', '#ff8c42'],
+                    borderWidth: 2,
+                    borderRadius: 8
                 }]
             },
             options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
                 scales: {
-                    r: { suggestedMin: 0, suggestedMax: 100 }
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8', callback: v => v + '%' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
                 }
             }
         });
