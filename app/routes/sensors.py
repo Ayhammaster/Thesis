@@ -214,6 +214,54 @@ def get_available_days(sensor_type):
         print(f"Error fetching days: {e}")
         return jsonify([]), 200
 
+@sensors_bp.route('/models-comparison')
+def models_comparison():
+    auth = check_auth()
+    if auth: return auth
+
+    last = (SensorReading.query
+            .order_by(SensorReading.timestamp.desc())
+            .first())
+    if not last:
+        return jsonify({'message': 'لا توجد قراءات بعد لتحليل النماذج.'})
+
+    result = AnomalyDetector.detect_all(last.value, last.sensor_type, last.device_id, last.latency_ms or 0)
+    result['value'] = last.value
+    result['latency_ms'] = last.latency_ms or 0
+    result['sensor_type'] = last.sensor_type
+    return jsonify(result)
+
+@sensors_bp.route('/latency-comparison')
+def latency_comparison():
+    auth = check_auth()
+    if auth: return auth
+
+    result = {}
+    for protocol in ['HTTP', 'MQTT']:
+        rows = (db.session.query(SensorReading.latency_ms)
+                .join(Device, SensorReading.device_id == Device.id)
+                .filter(Device.protocol == protocol,
+                        SensorReading.latency_ms.isnot(None),
+                        SensorReading.latency_ms > 0)
+                .all())
+        values = [r[0] for r in rows]
+        if values:
+            result[protocol] = {
+                'avg': round(sum(values) / len(values), 1),
+                'min': min(values),
+                'max': max(values),
+                'count': len(values)
+            }
+        else:
+            result[protocol] = {'avg': 0, 'min': 0, 'max': 0, 'count': 0}
+
+    diff = round(result['HTTP']['avg'] - result['MQTT']['avg'], 1)
+    result['difference'] = {
+        'avg': diff,
+        'faster_protocol': 'MQTT' if diff > 0 else ('HTTP' if diff < 0 else 'متساوي')
+    }
+    return jsonify(result)
+
 @sensors_bp.route('/sensor-data', methods=['DELETE'])
 def clear_sensor_data():
     auth = check_auth()

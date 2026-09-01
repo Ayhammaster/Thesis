@@ -469,6 +469,76 @@ async function clearSensorDataByType(sensorType) {
 
 
 
+// ==================== Latency Comparison (HTTP vs MQTT) ====================
+let latencyBarChart = null;
+
+async function loadLatencyComparison() {
+    try {
+        const data = await api('/api/latency-comparison');
+
+        document.getElementById('latAvgHttp').textContent = data.HTTP.avg;
+        document.getElementById('latAvgMqtt').textContent = data.MQTT.avg;
+        document.getElementById('latDiff').textContent = data.difference.avg;
+        document.getElementById('latFaster').textContent = data.difference.faster_protocol;
+
+        document.getElementById('latAvgHttpT').textContent = data.HTTP.avg;
+        document.getElementById('latMaxHttp').textContent = data.HTTP.max;
+        document.getElementById('latMinHttp').textContent = data.HTTP.min;
+        document.getElementById('latCountHttp').textContent = data.HTTP.count;
+
+        document.getElementById('latAvgMqttT').textContent = data.MQTT.avg;
+        document.getElementById('latMaxMqtt').textContent = data.MQTT.max;
+        document.getElementById('latMinMqtt').textContent = data.MQTT.min;
+        document.getElementById('latCountMqtt').textContent = data.MQTT.count;
+
+        const ctx = document.getElementById('latencyBarChart').getContext('2d');
+        if (latencyBarChart) latencyBarChart.destroy();
+
+        latencyBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['متوسط التأخير', 'أعلى تأخير', 'أدنى تأخير'],
+                datasets: [
+                    {
+                        label: 'HTTP (ms)',
+                        data: [data.HTTP.avg, data.HTTP.max, data.HTTP.min],
+                        backgroundColor: 'rgba(0,212,255,0.5)',
+                        borderColor: '#00d4ff',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    },
+                    {
+                        label: 'MQTT (ms)',
+                        data: [data.MQTT.avg, data.MQTT.max, data.MQTT.min],
+                        backgroundColor: 'rgba(139,92,246,0.5)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+    } catch (e) { console.error('loadLatencyComparison error:', e); }
+}
+
 let radarChart = null;
 
 async function loadModelsComparison() {

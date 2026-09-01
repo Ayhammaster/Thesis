@@ -21,6 +21,8 @@ navLinks.forEach(link => {
             case 'temperature': populateFilters('temperature'); loadSensorData('temperature'); break;
             case 'humidity': populateFilters('humidity'); loadSensorData('humidity'); break;
             case 'dashboard': loadDashboard(); break;
+            case 'models': loadModelsComparison(); break;
+            case 'latency': loadLatencyComparison(); break;
         }
 
         if (window.innerWidth <= 992) {

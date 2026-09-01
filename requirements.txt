@@ -2,9 +2,5 @@ Flask
 Flask-SQLAlchemy
 Flask-Mail
 Werkzeug
-tensorflow-cpu
-scikit-learn
-joblib
-numpy
-pandas
 gunicorn
+paho-mqtt==1.6.1

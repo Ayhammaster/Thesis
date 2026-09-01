@@ -1,0 +1,93 @@
+<section class="view" id="view-latency">
+    <div class="page-header">
+        <div class="page-title">
+            <div class="icon-box"><i class="fa-solid fa-stopwatch"></i></div>
+            <div>
+                <h2>مقارنة التأخير: HTTP مقابل MQTT</h2>
+                <small>متوسط وأعلى وأدنى زمن استجابة لكل بروتوكول</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-2">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(0,212,255,0.15); color:var(--accent-cyan);">
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+                <div class="value" id="latAvgHttp">--</div>
+                <div class="label">متوسط تأخير HTTP (ms)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(139,92,246,0.15); color:#8b5cf6;">
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+                <div class="value" id="latAvgMqtt">--</div>
+                <div class="label">متوسط تأخير MQTT (ms)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(255,140,66,0.15); color:#ff8c42;">
+                    <i class="fa-solid fa-arrow-down-up-across-line"></i>
+                </div>
+                <div class="value" id="latDiff">--</div>
+                <div class="label">فرق المتوسط (HTTP - MQTT)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="icon" style="background:rgba(16,185,129,0.15); color:#34d399;">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="value" id="latFaster">--</div>
+                <div class="label">البروتوكول الأسرع</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-chart-column" style="color:#ff8c42;"></i> مخطط مقارنة التأخير (ms)</h5>
+                <div class="chart-container" style="height:400px;"><canvas id="latencyBarChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="chart-card">
+                <h5><i class="fa-solid fa-table" style="color:var(--accent-cyan);"></i> تفاصيل المقارنة</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>البروتوكول</th>
+                                <th>متوسط التأخير (ms)</th>
+                                <th>أعلى تأخير (ms)</th>
+                                <th>أدنى تأخير (ms)</th>
+                                <th>عدد القراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge protocol-badge">HTTP</span></td>
+                                <td id="latAvgHttpT">--</td>
+                                <td id="latMaxHttp">--</td>
+                                <td id="latMinHttp">--</td>
+                                <td id="latCountHttp">--</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge protocol-badge">MQTT</span></td>
+                                <td id="latAvgMqttT">--</td>
+                                <td id="latMaxMqtt">--</td>
+                                <td id="latMinMqtt">--</td>
+                                <td id="latCountMqtt">--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
